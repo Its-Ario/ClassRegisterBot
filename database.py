@@ -21,3 +21,14 @@ class Database:
         col = self.db[colName]
         cursor = col.find(query)
         return await cursor.to_list(length=None)
+    
+    async def purgeData(self, colName, confirm=False):
+        if not confirm:
+            match input("Are You Sure About Clearing {colName} Collection(s) [Y, n]"):
+                case "Y":
+                    return await self.purgeData(colName, True)
+        
+        if colName == "*":
+            await self.client.drop_database("data")
+        
+        await self.db[colName].drop()
