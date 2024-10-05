@@ -2,15 +2,19 @@ from bale import Bot, Message
 from os import getenv
 from dotenv import load_dotenv
 from database import Database
+from logging_config import setup_logging
 import utils
+import logging
 
+setup_logging()
 load_dotenv()
 
+logger = logging.getLogger(__name__)
 client = Bot(getenv("TOKEN"))
 
 @client.event
 async def on_ready():
-    print(client.user.first_name, "Is Online!")
+    logger.info(f"{client.user.username} Is Online!")
     
 @client.event
 async def on_message(message: Message):
