@@ -22,6 +22,14 @@ class Database:
         cursor = col.find(query)
         return await cursor.to_list(length=None)
     
+    async def update_one(self, colName:str, query: dict, new_value: dict):
+        col = self.db[colName]
+        await col.update_one(query, {"$set": new_value})
+        
+    async def update_many(self, colName:str, query: dict, new_value: dict):
+        col = self.db[colName]
+        await col.update_many(query, {"$set": new_value})
+    
     async def purgeData(self, colName, confirm=False):
         if not confirm:
             match input("Are You Sure About Clearing {colName} Collection(s) [Y, n]"):
